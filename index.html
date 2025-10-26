@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JavaScript Quiz App</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  .container {
+    background: #000000;
+    color: #222;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1 {
+    font-size: 24px;
+    color: #4e4376;
+    margin-bottom: 20px;
+  }
+
+  .question {
+    font-size: 18px;
+    color: #222;
+    margin-bottom: 20px;
+    min-height: 60px;
+  }
+
+  .options button {
+    display: block;
+    width: 100%;
+    background: #f2f2f2;
+    border: none;
+    border-radius: 8px;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .options button:hover {
+    background: #4e4376;
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  .next-btn {
+    background: #2b5876;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    display: none;
+  }
+
+  .next-btn:hover {
+    background: #1e3c72;
+  }
+
+  .score-section {
+    display: none;
+  }
+
+  .score-section h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .score {
+    font-size: 20px;
+    color: #2b5876;
+    font-weight: bold;
+  }
+
+  .restart-btn {
+    background: #4e4376;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .restart-btn:hover {
+    background: #2b5876;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>💡 JavaScript Quiz Challenge</h1>
+    <div class="quiz">
+      <div class="question"></div>
+      <div class="options"></div>
+      <button class="next-btn">Next ➡</button>
+    </div>
+    <div class="score-section">
+      <h2>🎉 Quiz Completed!</h2>
+      <p class="score"></p>
+      <button class="restart-btn">Restart 🔁</button>
+    </div>
+  </div>
+
+<script>
+const questions = [
+  {
+    question: "If you run typeof null in the console, what do you get?",
+    options: ["'object'", "'null'", "'undefined'", "'number'"],
+    answer: "'object'"
+  },
+  {
+    question: "Inside an object method, what does the keyword this usually refer to?",
+    options: [
+      "The object that owns the method",
+      "The global object",
+      "The function itself",
+      "It’s always undefined"
+    ],
+    answer: "The object that owns the method"
+  },
+  {
+    question: "What’s a closure in JavaScript?",
+    options: [
+      "A function that remembers the variables from where it was created",
+      "A function that runs automatically",
+      "A method that closes a variable",
+      "An object that holds private data"
+    ],
+    answer: "A function that remembers the variables from where it was created"
+  },
+  {
+    question: "What happens when you check 0.1 + 0.2 === 0.3?",
+    options: ["true", "false", "undefined", "It throws an error"],
+    answer: "false"
+  },
+  {
+    question: "You have this code:\n\nconst obj = { a: 1 };\nconst copy = obj;\ncopy.a = 5;\nconsole.log(obj.a);\n\nWhat’s logged?",
+    options: ["1", "5", "undefined", "Error"],
+    answer: "5"
+  },
+  {
+    question: "What will typeof NaN return?",
+    options: ["'NaN'", "'number'", "'undefined'", "'object'"],
+    answer: "'number'"
+  },
+  {
+    question: "Which of the following is true about JavaScript Promises?",
+    options: [
+      "A Promise can only be resolved or rejected once",
+      "A Promise runs synchronously",
+      "A Promise must always reject",
+      "A Promise can resolve multiple times"
+    ],
+    answer: "A Promise can only be resolved or rejected once"
+  },
+  {
+    question: "What is 'event bubbling' in the DOM?",
+    options: [
+      "When an event moves up from the target element to its parents",
+      "When an event moves down from a parent to children",
+      "A fancy name for async functions",
+      "When an event is cancelled"
+    ],
+    answer: "When an event moves up from the target element to its parents"
+  },
+  {
+    question: "What does this print?\n\nconsole.log([1, 2, 3] + [4, 5, 6]);",
+    options: ["'1,2,34,5,6'", "'1,2,3,4,5,6'", "NaN", "An error"],
+    answer: "'1,2,34,5,6'"
+  },
+  {
+    question: "What does destructuring in JavaScript allow you to do?",
+    options: [
+      "Easily extract values from arrays or objects into variables",
+      "Merge two arrays together",
+      "Copy all object properties to another object",
+      "Delete variables faster"
+    ],
+    answer: "Easily extract values from arrays or objects into variables"
+  }
+];
+
+const questionElement = document.querySelector(".question");
+const optionsContainer = document.querySelector(".options");
+const nextBtn = document.querySelector(".next-btn");
+const scoreSection = document.querySelector(".score-section");
+const scoreText = document.querySelector(".score");
+const restartBtn = document.querySelector(".restart-btn");
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function startQuiz() {
+  currentQuestionIndex = 0;
+  score = 0;
+  scoreSection.style.display = "none";
+  document.querySelector(".quiz").style.display = "block";
+  showQuestion();
+}
+
+function showQuestion() {
+  const currentQuestion = questions[currentQuestionIndex];
+  questionElement.textContent = currentQuestion.question;
+  optionsContainer.innerHTML = "";
+
+  currentQuestion.options.forEach(option => {
+    const button = document.createElement("button");
+    button.textContent = option;
+    button.addEventListener("click", () => selectAnswer(button, currentQuestion.answer));
+    optionsContainer.appendChild(button);
+  });
+
+  nextBtn.style.display = "none";
+}
+
+function selectAnswer(selectedBtn, correctAnswer) {
+  const allButtons = document.querySelectorAll(".options button");
+  allButtons.forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correctAnswer) {
+      btn.style.backgroundColor = "#4CAF50";
+      btn.style.color = "#fff";
+    } else if (btn === selectedBtn) {
+      btn.style.backgroundColor = "#ff4d4d";
+      btn.style.color = "#fff";
+    }
+  });
+
+  if (selectedBtn.textContent === correctAnswer) score++;
+  nextBtn.style.display = "inline-block";
+}
+
+nextBtn.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showScore();
+  }
+});
+
+
+
+restartBtn.addEventListener("click", startQuiz);
+
+startQuiz();
+</script>
+
+</body>
+</html>
